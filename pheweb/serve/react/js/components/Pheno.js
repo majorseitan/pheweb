@@ -14,10 +14,12 @@ class Pheno extends React.Component {
 	}
         super(props)
         this.state = {
+		phenocode: props.match.params.pheno,
 	    columns: phenoTableCols[window.browser],
 		csColumns: csTableCols,
 		InsideColumns: csInsideTableCols,
-		dataToDownload: []
+		dataToDownload: [],
+		locus_groups: {}
 	}
 	this.resp_json = this.resp_json.bind(this)
 	this.error_state = this.error_state.bind(this)
@@ -28,6 +30,7 @@ class Pheno extends React.Component {
 	this.getManhattan = this.getManhattan.bind(this)
 	this.getQQ = this.getQQ.bind(this)
 	this.download = this.download.bind(this)
+	this.getGroup = this.getGroup.bind(this)
 	this.getUKBBN(props.match.params.pheno)
 	this.getPheno(props.match.params.pheno)
     }
@@ -44,7 +47,7 @@ class Pheno extends React.Component {
 	}
     
     error_alert(error) {
-	alert(`${phenocode}: ${error.statusText || error}`)
+	alert(`${error.statusText || error}`)
     }
 
     getUKBBN(phenocode) {
@@ -70,7 +73,21 @@ class Pheno extends React.Component {
 		this.getQQ(phenocode)
 	    })
 	    .catch(this.error_state)
-    }
+	}
+	
+	getGroup(phenocode,locus_id) {
+	fetch('/api/autoreport_variants/'+phenocode+'/'+locus_id)
+		.then(this.resp_json)
+		.then(response => {
+			this.setState({
+				locus_groups: {
+					...this.state.locus_groups,
+					[locus_id]:response
+				}
+			})
+		})
+		.catch(this.error_alert)
+	}
 
     getCredibleSets(phenocode) {
 	fetch('/api/autoreport/' + phenocode)
@@ -170,14 +187,14 @@ class Pheno extends React.Component {
 	}]}
 	defaultPageSize={10}
 	className="-striped -highlight"
-	SubComponent={row =>
+	SubComponent={row => 
 		<ReactTable 
-		data={this.state.credibleSets}
+		data={this.state.locus_groups.hasOwnProperty(row["original"]["locus_id"]) ? this.state.locus_groups[row["original"]["locus_id"]] : (this.getGroup(this.state.phenocode, row["original"]["locus_id"]),this.state.locus_groups[row["original"]["locus_id"]]) }
 		columns={this.state.InsideColumns}
 		defaultPageSize={10}
 		showPagination={true}
 		showPageSizeOptions={ true}
-		/>
+		/> 
 	}
 	    />
 		<div className="row">
@@ -237,7 +254,6 @@ class Pheno extends React.Component {
                 {ukbb}
 		<div id='manhattan_plot_container' />
 		<h3>Lead variants</h3>
-		<h3>NOTE: expanded data is currently the cs data, as there is no endpoint for complete reports yet.</h3>
 		{cs_table}
 		<h3>QQ plot</h3>
 		<div id='qq_plot_container' style={{width:'400px'}} />
