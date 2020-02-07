@@ -282,18 +282,17 @@ class Pheno extends React.Component {
                 {ukbb}
 		<div id='manhattan_plot_container' />
 		<h3>Lead variants{is_cs}</h3>
-		
-		<Tabs forceRenderTabPanel={true} defaultIndex={0} onSelect={this.onTabSelect} style={{height: '100%', width: '100%'}}>
+		<Tabs forceRenderTabPanel={true} defaultIndex={0} onSelect={this.onTabSelect} style={{ width: '100%'}}>
 		<TabList>
 		<Tab>Credible Sets</Tab>
 		<Tab>Traditional</Tab>
 		</TabList>
-		<TabPanel style={{height: '100%', display: this.state.selectedTab == 0 ? 'block' : 'none'}}>
+		<TabPanel style={{ display: this.state.selectedTab == 0 ? 'block' : 'none'}}>
 			<div id="network" style={{height: '100%', width: '100%'}}>
 				{cs_table}
 			</div>
 		</TabPanel>
-		<TabPanel style={{height: '100%', display: this.state.selectedTab == 1 ? 'block' : 'none'}}>
+		<TabPanel style={{ display: this.state.selectedTab == 1 ? 'block' : 'none'}}>
 			<div id="network" style={{height: '100%', width: '100%'}}>
 				{var_table}
 			</div>
