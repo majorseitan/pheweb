@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install --no-install-recommends texlive wget --yes
     chmod +x /usr/local/bin/cloud_sql_proxy
 
 RUN apt-get update && apt-get install python3-pip libffi-dev libz-dev libssl-dev libbz2-dev liblzma-dev --yes --fix-missing && \
-    pip3 install cython google-api-python-client google-auth google-auth-httplib2  
+    pip3 install cython
 
 ADD . /pheweb
 
