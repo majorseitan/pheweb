@@ -69,7 +69,7 @@ setup(
         'google-api-python-client~=1.7.11',
         'google-auth~=1.11.2',
         'google-auth-httplib2~=0.0.3',
-        'google-compute-engine~=20190916.0',
+        'google-compute-engine~=2.8.13',
         'greenlet~=0.4.15',
         'gunicorn~=19.9.0',
         'httplib2~=0.17.0',
